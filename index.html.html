@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>생활 속 단열 탐험대 - 초등 과학 · 열의 이동</title>
+  <style>
+    :root {
+      --bg: #f6f8f7;
+      --card: #ffffff;
+      --mint-bg: #e7f3ee;
+      --mint-border: #cde4da;
+      --primary: #1f5c54;
+      --primary-light: #e4f0ed;
+      --accent: #e67e22;
+      --text: #1f2937;
+      --muted: #5f6c72;
+      --border: #dfe6e3;
+      --shadow: 0 4px 14px rgba(24, 49, 45, 0.06);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 56px;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #ffffff 0%, #ebf5f1 100%);
+      border: 1px solid var(--mint-border);
+      border-radius: 22px;
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 1.85rem;
+      color: #133b36;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    /* Top Tabs */
+    .main-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .section-panel {
+      display: none;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    /* Subheader & Counter */
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-top h2 {
+      font-size: 1.35rem;
+      color: #163c37;
+    }
+
+    .section-top p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .fav-counter {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Filter Chips */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .filter-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 15px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-chip:hover {
+      background: #f0f6f4;
+    }
+
+    .filter-chip.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Card Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .item-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(24, 49, 45, 0.1);
+    }
+
+    .card-visual {
+      background: var(--mint-bg);
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 12px;
+      border-bottom: 1px solid var(--mint-border);
+    }
+
+    .card-emoji {
+      font-size: 3.4rem;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .card-cat-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(255,255,255,0.85);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .star-btn {
+      background: #f4f7f6;
+      border: 1px solid var(--border);
+      color: #9aa5a9;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .star-btn.starred {
+      background: #fff7e6;
+      border-color: #f5b041;
+      color: #f39c12;
+    }
+
+    /* Info Box & Review Section */
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .review-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .review-card h3 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .review-card .tagline {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.84rem;
+      padding: 4px 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .review-card p {
+      font-size: 0.94rem;
+      color: #374151;
+    }
+
+    /* Mission Section */
+    .mission-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .mission-step {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid #eef2f1;
+    }
+
+    .mission-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .mission-textarea {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 22, 0.52);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+      animation: popIn 0.18s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      background: var(--mint-bg);
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid var(--mint-border);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .modal-emoji {
+      font-size: 3.8rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-body {
+      padding: 22px 24px 26px;
+    }
+
+    .modal-body h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      color: #133b36;
+    }
+
+    .reveal-box {
+      background: #f8faf9;
+      border: 1px dashed #b9d4ca;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .reveal-btn {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .method-pill {
+      display: inline-block;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .method-전도 { background: #fdebd0; color: #b95800; }
+    .method-대류 { background: #d6eaf8; color: #1b6ca8; }
+    .method-복사 { background: #fadbd8; color: #b03a2e; }
+
+    .footer-note {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .empty-state {
+      background: #ffffff;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">초등 과학 · 열의 이동</span>
+      <h1>🔎 생활 속 단열 탐험대</h1>
+      <p>우리 주변에는 어떤 단열의 비밀이 숨어 있을까요? 그림 카드를 눌러 먼저 자신의 생각을 떠올려 보고, 대표 열 이동 방식을 확인해 봅시다!</p>
+    </header>
+
+    <nav class="main-tabs">
+      <button class="tab-btn active" data-tab="explore">① 단열 사례 탐색하기</button>
+      <button class="tab-btn" data-tab="review">② 전도·대류·복사 복습하기</button>
+      <button class="tab-btn" data-tab="mission">③ 나의 탐구 미션 확인하기</button>
+      <button class="tab-btn" data-tab="favorites">★ 내가 고른 사례 (<span id="tabFavCount">0</span>/2)</button>
+    </nav>
+
+    <!-- ① 단열 사례 탐색하기 -->
+    <section id="tab-explore" class="section-panel active">
+      <div class="section-top">
+        <div>
+          <h2>단열 사례 도감</h2>
+          <p>카드를 누르면 대표 열 이동 방식(전도·대류·복사 중 1개)과 단열 원리를 확인할 수 있어요.</p>
+        </div>
+        <div class="fav-counter">관심 사례 <span id="favCount">0</span> / 2개</div>
+      </div>
+
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="cards-grid" id="cardsGrid"></div>
+    </section>
+
+    <!-- ② 전도·대류·복사 복습하기 -->
+    <section id="tab-review" class="section-panel">
+      <div class="section-top">
+        <div>
+          <h2>전도 · 대류 · 복사 핵심 복습</h2>
+          <p>열이 이동하는 세 가지 방법과 단열이 열의 이동을 줄이는 원리를 간단히 복습해요.</p>
+        </div>
+      </div>
+      <div class="review-grid">
+        <div class="review-card">
+          <h3>1. 전도 (Conduction)</h3>
+          <span class="tagline">물체를 따라 직접 전달되는 열</span>
+          <p>온도가 다른 두 물체가 맞닿아 있거나 한 물체 안에서 뜨거운 부분의 열이 차가운 부분으로 직접 전해지는 현상입니다. 공기층이나 나무·스티로폼처럼 열을 잘 전달하지 않는 재료는 전도를 줄여 줍니다.</p>
+        </div>
+        <div class="review-card">
+          <h3>2. 대류 (Convection)</h3>
+          <span class="tagline">공기나 액체가 움직이며 전달되는 열</span>
+          <p>따뜻해진 공기나 액체는 위로 올라가고 차가운 공기나 액체는 아래로 내려오면서 열이 이동하는 현상입니다. 문틈을 막거나 공기 흐름을 가두면 대류에 의한 열 손실을 줄일 수 있습니다.</p>
+        </div>
+        <div class="review-card">
+          <h3>3. 복사 (Radiation)</h3>
+          <span class="tagline">물질을 거치지 않고 바로 퍼지는 열</span>
+          <p>태양열이나 불꽃의 열처럼 중간에 공기가 없어도 빛과 함께 사방으로 직접 퍼져 나가는 열 이동 방식입니다. 반짝이는 은박 표면이나 특수 단열복은 복사열을 반사해 막아 줍니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 나의 탐구 미션 확인하기 -->
+    <section id="tab-mission" class="section-panel">
+      <div class="section-top">
+        <div>
+          <h2>나의 탐구 미션</h2>
+          <p>도감에서 가장 흥미로운 단열 사례 2가지를 별표(★)로 고른 뒤 아래 미션을 해결해 보세요.</p>
+        </div>
+      </div>
+      <div class="mission-box">
+        <div class="mission-step">
+          <div class="step-num">1</div>
+          <div><strong>관심 사례 2가지 고르기:</strong> 도감 카드 오른쪽 아래의 <strong>☆ 버튼</strong>을 눌러 내가 탐구하고 싶은 단열 사례 2개를 선택하세요.</div>
+        </div>
+        <div class="mission-step">
+          <div class="step-num">2</div>
+          <div><strong>대표 열 이동 방식 추리하기:</strong> 카드를 열어 보기 전에 먼저 <strong>전도·대류·복사 중 어떤 열의 이동을 주로 막는지</strong> 스스로 생각해 봅시다.</div>
+        </div>
+        <div class="mission-step">
+          <div class="step-num">3</div>
+          <div><strong>실험관찰 책에 정리하기:</strong> 고른 사례의 단열 원리를 우리 생활 속 다른 물건과 비교해 실험관찰 책이나 아래 메모 칸에 적어 보세요.</div>
+        </div>
+        <textarea class="mission-textarea" placeholder="여기에 내가 고른 단열 사례 2가지와 단열의 비밀을 간단히 메모해 보세요!"></textarea>
+      </div>
+    </section>
+
+    <!-- ★ 내가 고른 사례 -->
+    <section id="tab-favorites" class="section-panel">
+      <div class="section-top">
+        <div>
+          <h2>★ 내가 고른 관심 사례</h2>
+          <p>탐구 미션을 위해 선택한 사례(최대 2개)를 모아 볼 수 있어요.</p>
+        </div>
+      </div>
+      <div id="favoritesContainer"></div>
+    </section>
+
+    <p class="footer-note">탐구 기록은 실험관찰 책에 작성해 주세요. 실제 단열에서는 여러 열 이동 방법이 함께 작용할 수 있으며, 이 도감은 가장 대표적인 1가지를 중심으로 정리했습니다.</p>
+  </div>
+
+  <!-- 상세 보기 모달 -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <button class="modal-close" id="closeModalBtn" aria-label="닫기">✕</button>
+        <div class="modal-emoji" id="modalEmoji"></div>
+        <span class="card-cat-tag" id="modalCategory"></span>
+      </div>
+      <div class="modal-body">
+        <h3 id="modalTitle"></h3>
+        <p id="modalQuestion" style="color:#4b5563; font-size:0.95rem;"></p>
+        <div class="reveal-box">
+          <button class="reveal-btn" id="revealAnswerBtn">💡 대표 열 이동 방식 및 단열 원리 확인하기</button>
+          <div id="answerContent" style="display:none;">
+            <span class="method-pill" id="modalMethod"></span>
+            <p id="modalExplanation" style="font-size:0.95rem; color:#1f2937;"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ITEMS = [
+      // 우리 집 (7)
+      { id: 1, category: '우리 집', icon: '🏠', name: '단열커튼', method: '대류', desc: '창가와 커튼 사이에 공기층을 가두어 차가운 바깥 공기와 실내 따뜻한 공기가 섞이며 순환(대류)하는 현상을 줄입니다.' },
+      { id: 2, category: '우리 집', icon: '🏠', name: '문풍지', method: '대류', desc: '문틈과 창틈을 꼼꼼히 막아 찬바람이 새어 들어오며 공기가 흐르는 대류를 차단합니다.' },
+      { id: 3, category: '우리 집', icon: '🏠', name: '뽁뽁이(에어캡)', method: '전도', desc: '유리창에 붙인 수많은 작은 공기 방울들이 열이 유리창을 타고 바로 빠져나가는 전도를 늦춥니다.' },
+      { id: 4, category: '우리 집', icon: '🏠', name: '이중창', method: '전도', desc: '두 장의 유리 사이에 갇힌 공기층이 열을 잘 전달하지 않아 실내외로 열이 직접 이동하는 전도를 줄입니다.' },
+      { id: 5, category: '우리 집', icon: '🏠', name: '벽 속 단열재', method: '전도', desc: '벽 내부에 채운 스티로폼·유리섬유 단열재 속 공기층이 벽을 통한 열의 전도를 막아 집 안 온도를 지킵니다.' },
+      { id: 6, category: '우리 집', icon: '🏠', name: '거실 러그·카펫', method: '전도', desc: '차가운 바닥과 발 사이에 두꺼운 섬유 공기층을 만들어 발의 체온이 바닥으로 빠져나가는 전도를 줄입니다.' },
+      { id: 7, category: '우리 집', icon: '🏠', name: '바닥 은박 단열 매트', method: '복사', desc: '반짝이는 은박 표면이 바닥에서 나오는 열선(복사열)을 반사해 위로 열이 빠져나가는 것을 줄여 줍니다.' },
+
+      // 음식의 온도 (7)
+      { id: 8, category: '음식의 온도', icon: '🍱', name: '스티로폼 용기', method: '전도', desc: '스티로폼 내부의 미세한 공기 주머니가 열을 잘 전달하지 않아 음식의 열이 용기 벽을 타고 빠져나가는 전도를 줄입니다.' },
+      { id: 9, category: '음식의 온도', icon: '🍱', name: '주방 장갑', method: '전도', desc: '두꺼운 천이나 실리콘 소재가 뜨거운 냄비 손잡이로부터 손으로 열이 바로 전해지는 전도를 막아 줍니다.' },
+      { id: 10, category: '음식의 온도', icon: '🍱', name: '뚝배기', method: '전도', desc: '흙으로 구워진 그릇 벽이 열을 천천히 전달·보관해, 불을 끈 뒤에도 음식에 열이 서서히 전해지는 전도 특성이 나타납니다.' },
+      { id: 11, category: '음식의 온도', icon: '🍱', name: '보온병 진공벽', method: '전도', desc: '이중벽 사이를 진공으로 만들어 열을 전달할 물질을 없앰으로써 전도에 의한 열 손실을 크게 줄입니다.' },
+      { id: 12, category: '음식의 온도', icon: '🍱', name: '보온병 은도금 내벽', method: '복사', desc: '거울처럼 반짝이는 안쪽 벽면이 뜨거운 음료에서 나오는 복사열을 안쪽으로 다시 반사합니다.' },
+      { id: 13, category: '음식의 온도', icon: '🍱', name: '냄비 나무 손잡이', method: '전도', desc: '금속보다 열을 훨씬 느리게 전달하는 나무나 플라스틱을 사용해 손으로 열이 전도되는 것을 줄입니다.' },
+      { id: 14, category: '음식의 온도', icon: '🍱', name: '아이스박스 뚜껑', method: '대류', desc: '뚜껑을 꼭 닫아 외부의 따뜻한 공기와 내부의 차가운 공기가 섞이며 순환하는 대류를 막아 줍니다.' },
+
+      // 우리 몸 (6)
+      { id: 15, category: '우리 몸', icon: '🧥', name: '패딩 점퍼', method: '전도', desc: '충전재(오리털·솜) 사이에 가둔 풍부한 공기층이 체온이 바깥으로 빠져나가는 전도를 막아 줍니다.' },
+      { id: 16, category: '우리 몸', icon: '🧥', name: '털 스웨터', method: '전도', desc: '꼬불꼬불한 털실 사이의 작은 공기층이 열의 전도를 늦추어 몸을 따뜻하게 유지합니다.' },
+      { id: 17, category: '우리 몸', icon: '🧥', name: '두꺼운 이불', method: '전도', desc: '솜과 섬유 사이에 머금은 정지된 공기층이 잠자는 동안 체온이 식는 전도를 줄여 줍니다.' },
+      { id: 18, category: '우리 몸', icon: '🧥', name: '방한 장갑', method: '전도', desc: '두꺼운 안감과 공기층이 차가운 바깥 물체와 손 사이의 직접적인 열 전도를 막아 줍니다.' },
+      { id: 19, category: '우리 몸', icon: '🧥', name: '방한 부츠', method: '전도', desc: '두꺼운 밑창과 털 안감이 차가운 눈길·땅바닥으로 발의 열이 전도되는 것을 줄여 줍니다.' },
+      { id: 20, category: '우리 몸', icon: '🧥', name: '은박 비상 담요', method: '복사', desc: '얇은 은박 막이 우리 몸에서 방출되는 복사열을 다시 몸 쪽으로 반사해 체온 유지를 돕습니다.' },
+
+      // 특별한 곳 (6)
+      { id: 21, category: '특별한 곳', icon: '🚀', name: '이글루', method: '전도', desc: '눈 블록 속 수많은 공기 알갱이가 내부의 열이 눈 벽을 통해 바깥으로 직접 빠져나가는 전도를 줄여 줍니다.' },
+      { id: 22, category: '특별한 곳', icon: '🚀', name: '소방관 단열복', method: '복사', desc: '화염이나 뜨거운 물체에서 사방으로 퍼져 나오는 강한 열선(복사열)을 반사·차단해 소방관을 보호합니다.' },
+      { id: 23, category: '특별한 곳', icon: '🚀', name: '우주선 금박 단열재', method: '복사', desc: '우주 공간에서 강하게 내리쬐는 태양의 복사열을 반사해 우주선 내부 기기를 보호합니다.' },
+      { id: 24, category: '특별한 곳', icon: '🚀', name: '우주복 단열층', method: '복사', desc: '여러 겹의 반사 필름층이 우주의 극심한 온도 변화 속에서 복사열의 출입을 차단합니다.' },
+      { id: 25, category: '특별한 곳', icon: '🚀', name: '남극 기지 고상식 건물', method: '전도', desc: '건물을 눈과 얼음 바닥에서 띄워 지어 차가운 지면으로 열이 직접 전달되는 전도를 줄입니다.' },
+      { id: 26, category: '특별한 곳', icon: '🚀', name: '비닐하우스 이중 비닐', method: '대류', desc: '두 겹 비닐 사이에 공기층을 가두어 내부의 따뜻한 공기가 바깥 찬 공기와 섞이는 대류를 줄입니다.' }
+    ];
+
+    const EMOJI_MAP = {
+      '단열커튼': '🪟',
+      '문풍지': '🚪',
+      '뽁뽁이(에어캡)': '🫧',
+      '이중창': '🪟',
+      '벽 속 단열재': '🧱',
+      '거실 러그·카펫': '🧶',
+      '바닥 은박 단열 매트': '🪞',
+      '스티로폼 용기': '🥡',
+      '주방 장갑': '🧤',
+      '뚝배기': '🍲',
+      '보온병 진공벽': '🫗',
+      '보온병 은도금 내벽': '✨',
+      '냄비 나무 손잡이': '🍳',
+      '아이스박스 뚜껑': '🧊',
+      '패딩 점퍼': '🧥',
+      '털 스웨터': '🧶',
+      '두꺼운 이불': '🛏️',
+      '방한 장갑': '🧤',
+      '방한 부츠': '🥾',
+      '은박 비상 담요': '🛡️',
+      '이글루': '🏔️',
+      '소방관 단열복': '🧑‍🚒',
+      '우주선 금박 단열재': '🛰️',
+      '우주복 단열층': '🧑‍🚀',
+      '남극 기지 고상식 건물': '🏢',
+      '비닐하우스 이중 비닐': '🌱'
+    };
+
+    const CATEGORIES = ['전체 보기', '우리 집', '음식의 온도', '우리 몸', '특별한 곳'];
+    const CAT_ICONS = {
+      '전체 보기': '🔎',
+      '우리 집': '🏠',
+      '음식의 온도': '🍱',
+      '우리 몸': '🧥',
+      '특별한 곳': '🚀'
+    };
+
+    let currentCategory = '전체 보기';
+    let favorites = [];
+
+    const filterBar = document.getElementById('filterBar');
+    const cardsGrid = document.getElementById('cardsGrid');
+    const favCountEl = document.getElementById('favCount');
+    const tabFavCountEl = document.getElementById('tabFavCount');
+    const favoritesContainer = document.getElementById('favoritesContainer');
+
+    // Render filter chips
+    function renderFilters() {
+      filterBar.innerHTML = '';
+      CATEGORIES.forEach(cat => {
+        const count = cat === '전체 보기'
+          ? ITEMS.length
+          : ITEMS.filter(i => i.category === cat).length;
+
+        const btn = document.createElement('button');
+        btn.className = 'filter-chip' + (currentCategory === cat ? ' active' : '');
+        btn.textContent = `${CAT_ICONS[cat]} ${cat} · ${count}`;
+        btn.onclick = () => {
+          currentCategory = cat;
+          renderFilters();
+          renderCards();
+        };
+        filterBar.appendChild(btn);
+      });
+    }
+
+    function createCardElement(item) {
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      const isFav = favorites.includes(item.id);
+      const emoji = EMOJI_MAP[item.name] || item.icon;
+
+      card.innerHTML = `
+        <div class="card-visual">
+          <div class="card-emoji">${emoji}</div>
+          <span class="card-cat-tag">${item.icon} ${item.category}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${item.name}</div>
+          <button class="star-btn ${isFav ? 'starred' : ''}" title="관심 사례 선택">${isFav ? '★' : '☆'}</button>
+        </div>
+      `;
+
+      card.querySelector('.star-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(item.id);
+      });
+
+      card.addEventListener('click', () => openModal(item));
+      return card;
+    }
+
+    function renderCards() {
+      cardsGrid.innerHTML = '';
+      const filtered = currentCategory === '전체 보기'
+        ? ITEMS
+        : ITEMS.filter(i => i.category === currentCategory);
+
+      filtered.forEach(item => {
+        cardsGrid.appendChild(createCardElement(item));
+      });
+    }
+
+    function toggleFavorite(id) {
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(f => f !== id);
+      } else {
+        if (favorites.length >= 2) {
+          alert('관심 사례는 최대 2개까지 선택할 수 있어요! 기존 별표를 해제한 뒤 다시 선택해 주세요.');
+          return;
+        }
+        favorites.push(id);
+      }
+      favCountEl.textContent = favorites.length;
+      tabFavCountEl.textContent = favorites.length;
+      renderCards();
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      if (favorites.length === 0) {
+        favoritesContainer.innerHTML = `
+          <div class="empty-state">
+            아직 고른 관심 사례가 없어요.<br/>
+            <strong>[① 단열 사례 탐색하기]</strong>에서 카드 오른쪽의 <strong>☆ 버튼</strong>을 눌러 2가지를 골라 보세요!
+          </div>
+        `;
+        return;
+      }
+      const grid = document.createElement('div');
+      grid.className = 'cards-grid';
+      favorites.forEach(id => {
+        const item = ITEMS.find(i => i.id === id);
+        if (item) grid.appendChild(createCardElement(item));
+      });
+      favoritesContainer.innerHTML = '';
+      favoritesContainer.appendChild(grid);
+    }
+
+    // Modal logic
+    const modal = document.getElementById('detailModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const revealAnswerBtn = document.getElementById('revealAnswerBtn');
+    const answerContent = document.getElementById('answerContent');
+
+    function openModal(item) {
+      document.getElementById('modalEmoji').textContent = EMOJI_MAP[item.name] || item.icon;
+      document.getElementById('modalCategory').textContent = `${item.icon} ${item.category}`;
+      document.getElementById('modalTitle').textContent = item.name;
+      document.getElementById('modalQuestion').textContent =
+        `먼저 스스로 떠올려 보세요! '${item.name}'은(는) 전도·대류·복사 중 어떤 열의 이동을 주로 줄여 줄까요?`;
+
+      const methodEl = document.getElementById('modalMethod');
+      methodEl.textContent = `대표 열 이동 방식: ${item.method}`;
+      methodEl.className = `method-pill method-${item.method}`;
+      document.getElementById('modalExplanation').textContent = item.desc;
+
+      revealAnswerBtn.style.display = 'block';
+      answerContent.style.display = 'none';
+      modal.classList.add('open');
+    }
+
+    revealAnswerBtn.onclick = () => {
+      revealAnswerBtn.style.display = 'none';
+      answerContent.style.display = 'block';
+    };
+
+    closeModalBtn.onclick = () => modal.classList.remove('open');
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    };
+
+    // Tab navigation
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      };
+    });
+
+    // Init
+    renderFilters();
+    renderCards();
+    renderFavorites();
+  </script>
+</body>
+</html>
